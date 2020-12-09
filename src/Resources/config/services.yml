@@ -1,0 +1,4 @@
+#services:
+#    terminal42_node.manager:
+#        class: Terminal42\NodeBundle\NodeManager
+#        public: true

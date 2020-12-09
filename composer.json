@@ -1,0 +1,34 @@
+{
+    "name": "codefog/contao-faq-tags",
+    "description": "FAQ Tags bundle for Contao Open Source CMS",
+    "keywords": ["contao", "tag", "tags", "tagging", "faq"],
+    "type": "contao-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Codefog",
+            "homepage": "https://codefog.pl"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "contao/core-bundle": "^4.9",
+        "contao/faq-bundle": "^4.9",
+        "codefog/tags-bundle": "^3.1"
+    },
+    "require-dev": {
+        "contao/manager-plugin": "^2.0",
+        "contao/php-cs-fixer": "^2.2"
+    },
+    "conflict": {
+        "contao/manager-plugin": "<2.0 || >=3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Codefog\\FaqTagsBundle\\": "src/"
+        }
+    },
+    "extra": {
+        "contao-manager-plugin": "Codefog\\FaqTagsBundle\\ContaoManager\\Plugin"
+    }
+}
