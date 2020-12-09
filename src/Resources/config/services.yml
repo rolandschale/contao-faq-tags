@@ -1,4 +1,5 @@
-#services:
-#    terminal42_node.manager:
-#        class: Terminal42\NodeBundle\NodeManager
-#        public: true
+services:
+    codefog_faq_tags.faq_tag_list_module:
+        class: Codefog\FaqTagsBundle\Controller\FrontendModule\FaqTagListModule
+        arguments:
+            - "@codefog_tags.manager.codefog_faq"
