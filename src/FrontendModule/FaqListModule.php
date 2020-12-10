@@ -13,24 +13,19 @@ declare(strict_types=1);
 namespace Codefog\FaqTagsBundle\FrontendModule;
 
 use Contao\FaqCategoryModel;
-use Contao\FaqModel;
 use Contao\ModuleFaqList;
 use Contao\StringUtil;
 
 class FaqListModule extends ModuleFaqList
 {
+    use TagsTrait;
+
     /**
      * {@inheritDoc}
      */
     protected function compile(): void
     {
-        /**
-         * @todo – filter faqs by tags
-         * @todo – add tags to template
-         */
-        $objFaq = FaqModel::findPublishedByPids($this->faq_categories);
-
-        if (null === $objFaq) {
+        if (null === ($objFaq = $this->getFaqItems($this))) {
             $this->Template->faq = [];
 
             return;

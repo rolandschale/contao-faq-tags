@@ -25,18 +25,14 @@ use Contao\UserModel;
 
 class FaqPageModule extends ModuleFaqPage
 {
+    use TagsTrait;
+
     /**
      * {@inheritDoc}
      */
     protected function compile(): void
     {
-        /**
-         * @todo – filter faqs by tags
-         * @todo – add tags to template
-         */
-        $objFaq = FaqModel::findPublishedByPids($this->faq_categories);
-
-        if (null === $objFaq) {
+        if (null === ($objFaq = $this->getFaqItems($this))) {
             $this->Template->faq = [];
 
             return;

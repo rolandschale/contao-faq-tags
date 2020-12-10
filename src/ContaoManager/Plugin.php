@@ -15,6 +15,7 @@ namespace Codefog\FaqTagsBundle\ContaoManager;
 use Codefog\FaqTagsBundle\CodefogFaqTagsBundle;
 use Codefog\TagsBundle\CodefogTagsBundle;
 use Contao\CoreBundle\ContaoCoreBundle;
+use Contao\FaqBundle\ContaoFaqBundle;
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
@@ -29,7 +30,11 @@ class Plugin implements BundlePluginInterface, ExtensionPluginInterface
     public function getBundles(ParserInterface $parser): array
     {
         return [
-            BundleConfig::create(CodefogFaqTagsBundle::class)->setLoadAfter([ContaoCoreBundle::class, CodefogTagsBundle::class]),
+            BundleConfig::create(CodefogFaqTagsBundle::class)->setLoadAfter([
+                ContaoCoreBundle::class,
+                ContaoFaqBundle::class,
+                CodefogTagsBundle::class,
+            ]),
         ];
     }
 

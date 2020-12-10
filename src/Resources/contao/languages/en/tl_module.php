@@ -13,6 +13,7 @@ declare(strict_types=1);
 /*
  * Fields
  */
+$GLOBALS['TL_LANG']['tl_module']['faq_allowTagFiltering'] = ['Allow filtering by tags', 'Allow to filter the FAQ items by a tag provided in the URL.'];
 $GLOBALS['TL_LANG']['tl_module']['faq_tagsOrder'] = ['Tags order', 'Here you can choose the tags order.'];
 
 /*
