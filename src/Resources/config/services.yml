@@ -2,4 +2,5 @@ services:
     codefog_faq_tags.faq_tag_list_module:
         class: Codefog\FaqTagsBundle\Controller\FrontendModule\FaqTagListModule
         arguments:
+            - "@database_connection"
             - "@codefog_tags.manager.codefog_faq"
