@@ -16,6 +16,7 @@ use Codefog\TagsBundle\Manager\DefaultManager;
 use Codefog\TagsBundle\Tag;
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
+use Contao\Input;
 use Contao\ModuleModel;
 use Contao\PageModel;
 use Contao\StringUtil;
@@ -183,6 +184,7 @@ class FaqTagListModule extends AbstractFrontendModuleController
             'name' => $tag->getName(),
             'count' => $tag->getData()['count'],
             'url' => ($url !== null) ? sprintf($url, $tag->getData()['alias']) : null,
+            'isActive' => Input::get(self::URL_PARAMETER) === $tag->getData()['alias'],
         ];
     }
 }
