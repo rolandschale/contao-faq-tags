@@ -39,6 +39,11 @@ class FaqListModule extends ModuleFaqList
             $arrTemp['title'] = StringUtil::specialchars($objFaq->question, true);
             $arrTemp['href'] = $this->generateFaqLink($objFaq);
 
+            // Add the tags
+            if ($this->faq_showTags) {
+                $arrTemp['tags'] = $this->getFaqTags($objFaq->current(), (int) $this->faq_tagsTargetPage);
+            }
+
             /** @var FaqCategoryModel $objPid */
             $objPid = $objFaq->getRelated('pid');
 

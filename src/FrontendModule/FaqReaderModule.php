@@ -12,10 +12,13 @@ declare(strict_types=1);
 
 namespace Codefog\FaqTagsBundle\FrontendModule;
 
+use Contao\FaqModel;
 use Contao\ModuleFaqReader;
 
 class FaqReaderModule extends ModuleFaqReader
 {
+    use TagsTrait;
+
     /**
      * {@inheritDoc}
      */
@@ -23,6 +26,9 @@ class FaqReaderModule extends ModuleFaqReader
     {
         parent::compile();
 
-        // @todo – add tags to template
+        // Add the tags
+        if ($this->faq_showTags && ($faqModel = FaqModel::findByPk($this->Template->faq['id'])) !== null) {
+            $this->Template->tags = $this->getFaqTags($faqModel, (int) $this->faq_tagsTargetPage);
+        }
     }
 }

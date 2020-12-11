@@ -76,6 +76,11 @@ class FaqPageModule extends ModuleFaqPage
                 $this->addEnclosuresToTemplate($objTemp, $objFaq->row());
             }
 
+            // Add the tags
+            if ($this->faq_showTags) {
+                $objTemp->tags = $this->getFaqTags($objFaq->current(), (int) $this->faq_tagsTargetPage);
+            }
+
             /** @var UserModel $objAuthor */
             $objAuthor = $objFaq->getRelated('author');
             $objTemp->info = sprintf($GLOBALS['TL_LANG']['MSC']['faqCreatedBy'], Date::parse($objPage->dateFormat, $objFaq->tstamp), $objAuthor->name);

@@ -12,13 +12,11 @@ declare(strict_types=1);
 
 namespace Codefog\FaqTagsBundle\Controller\FrontendModule;
 
+use Codefog\FaqTagsBundle\FaqManager;
 use Codefog\TagsBundle\Manager\DefaultManager;
-use Codefog\TagsBundle\Tag;
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
-use Contao\Input;
 use Contao\ModuleModel;
-use Contao\PageModel;
 use Contao\StringUtil;
 use Contao\Template;
 use Doctrine\DBAL\Connection;
@@ -31,22 +29,14 @@ use Symfony\Component\HttpFoundation\Response;
 class FaqTagListModule extends AbstractFrontendModuleController
 {
     /**
-     * Order
-     */
-    const ORDER_NAME_ASC = 'name_asc';
-    const ORDER_NAME_DESC = 'name_desc';
-    const ORDER_COUNT_ASC = 'count_asc';
-    const ORDER_COUNT_DESC = 'count_desc';
-
-    /**
-     * URL parameter
-     */
-    const URL_PARAMETER = 'tag';
-
-    /**
      * @var Connection
      */
     private $connection;
+
+    /**
+     * @var FaqManager
+     */
+    private $faqManager;
 
     /**
      * @var DefaultManager
@@ -56,11 +46,13 @@ class FaqTagListModule extends AbstractFrontendModuleController
     /**
      * FaqTagListModule constructor.
      * @param Connection $connection
+     * @param FaqManager $faqManager
      * @param DefaultManager $tagsManager
      */
-    public function __construct(Connection $connection, DefaultManager $tagsManager)
+    public function __construct(Connection $connection, FaqManager $faqManager, DefaultManager $tagsManager)
     {
         $this->connection = $connection;
+        $this->faqManager = $faqManager;
         $this->tagsManager = $tagsManager;
     }
 
@@ -70,7 +62,7 @@ class FaqTagListModule extends AbstractFrontendModuleController
             return new Response();
         }
 
-        $template->tags = $this->generateTags($model, $tags);
+        $template->tags = $this->faqManager->generateTags($tags, (int) $model->faq_tagsTargetPage);
 
         return new Response($template->parse());
     }
@@ -108,83 +100,6 @@ class FaqTagListModule extends AbstractFrontendModuleController
             return [];
         }
 
-        return $this->sortTags($tags, $model->faq_tagsOrder);
-    }
-
-    /**
-     * Sort the tags.
-     */
-    protected function sortTags(array $tags, string $order): array
-    {
-        switch ($order) {
-            case self::ORDER_NAME_ASC:
-                usort($tags, function (Tag $a, Tag $b): int {
-                    return strnatcasecmp($a->getName(), $b->getName());
-                });
-                break;
-
-            case self::ORDER_NAME_DESC:
-                usort($tags, function (Tag $a, Tag $b): int {
-                    return -strnatcasecmp($a->getName(), $b->getName());
-                });
-                break;
-
-            case self::ORDER_COUNT_ASC:
-                usort($tags, function (Tag $a, Tag $b): int {
-                    if ($a->getData()['count'] === $b->getData()['count']) {
-                        return 0;
-                    }
-
-                    return $a->getData()['count'] - $b->getData()['count'];
-                });
-                break;
-
-            case self::ORDER_COUNT_DESC:
-                usort($tags, function (Tag $a, Tag $b): int {
-                    if ($a->getData()['count'] === $b->getData()['count']) {
-                        return 0;
-                    }
-
-                    return $b->getData()['count'] - $a->getData()['count'];
-                });
-                break;
-        }
-
-        return $tags;
-    }
-
-    /**
-     * Generate the tags.
-     */
-    protected function generateTags(ModuleModel $model, array $tags): array
-    {
-        // Generate the tags URL
-        if ($model->jumpTo && ($page = PageModel::findPublishedById($model->jumpTo)) !== null) {
-            $url = $page->getFrontendUrl('/' . self::URL_PARAMETER . '/%s');
-        } else {
-            $url = null;
-        }
-
-        $return = [];
-
-        /** @var Tag $tag */
-        foreach ($tags as $tag) {
-            $return[] = $this->generateTag($tag, $url);
-        }
-
-        return $return;
-    }
-
-    /**
-     * Generate a single tag.
-     */
-    protected function generateTag(Tag $tag, string $url = null): array
-    {
-        return [
-            'name' => $tag->getName(),
-            'count' => $tag->getData()['count'],
-            'url' => ($url !== null) ? sprintf($url, $tag->getData()['alias']) : null,
-            'isActive' => Input::get(self::URL_PARAMETER) === $tag->getData()['alias'],
-        ];
+        return $this->faqManager->sortTags($tags, $model->faq_tagsOrder);
     }
 }
