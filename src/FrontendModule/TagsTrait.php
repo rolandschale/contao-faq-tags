@@ -9,7 +9,6 @@ use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\FaqModel;
 use Contao\Input;
 use Contao\Model\Collection;
-use Contao\Module;
 use Contao\System;
 
 /**
@@ -31,14 +30,10 @@ trait TagsTrait
     }
 
     /**
-     * Get the FAQ items
+     * Get the FAQ items by tag
      */
-    protected function getFaqItems(Module $module): ?Collection
+    protected function getFaqItemsByTag(Tag $tag, array $faqCategories): ?Collection
     {
-        if (!$module->faq_allowTagFiltering || ($tag = $this->getCurrentTag()) === null) {
-            return FaqModel::findPublishedByPids($this->faq_categories);
-        }
-
         $tagManager = $this->getTagsManager();
         $faqIds = $tagManager->getSourceFinder()->findMultiple($tagManager->createSourceCriteria()->setTag($tag));
 
@@ -49,7 +44,7 @@ trait TagsTrait
 
         $columns = [
             'id IN (' . implode(',', array_map('\intval', $faqIds)) . ')',
-            'pid IN(' . implode(',', array_map('\intval', $this->faq_categories)) . ')',
+            'pid IN(' . implode(',', array_map('\intval', $faqCategories)) . ')',
         ];
 
         $values = [];

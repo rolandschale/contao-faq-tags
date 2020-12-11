@@ -2,6 +2,10 @@
 
 <?php $this->block('content'); ?>
 
+<?php if ($this->tagsHeadline): ?>
+    <h3 class="tags-headline"><?= $this->tagsHeadline ?></h3>
+<?php endif; ?>
+
 <?php foreach ($this->faq as $category): ?>
     <h2><?= $category['headline'] ?></h2>
     <ul class="<?= $category['class'] ?>">

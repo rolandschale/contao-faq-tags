@@ -32,7 +32,15 @@ class FaqPageModule extends ModuleFaqPage
      */
     protected function compile(): void
     {
-        if (null === ($objFaq = $this->getFaqItems($this))) {
+        // Filter items by tag
+        if ($this->faq_allowTagFiltering && ($tag = $this->getCurrentTag()) !== null) {
+            $objFaq = $this->getFaqItemsByTag($tag, $this->faq_categories);
+            $this->Template->tagsHeadline = sprintf($GLOBALS['TL_LANG']['MSC']['faqTagsHeadline'], $tag->getName());
+        } else {
+            $objFaq = FaqModel::findPublishedByPids($this->faq_categories);
+        }
+
+        if (null === $objFaq) {
             $this->Template->faq = [];
 
             return;
