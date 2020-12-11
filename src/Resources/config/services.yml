@@ -3,6 +3,7 @@ services:
         class: Codefog\FaqTagsBundle\FaqManager
         public: true
         arguments:
+            - "@contao.framework"
             - "@codefog_tags.manager.codefog_faq"
 
     codefog_faq_tags.faq_tag_list_module:

@@ -4,6 +4,7 @@ namespace Codefog\FaqTagsBundle;
 
 use Codefog\TagsBundle\Manager\DefaultManager;
 use Codefog\TagsBundle\Tag;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Input;
 use Contao\PageModel;
 
@@ -23,16 +24,23 @@ class FaqManager
     const URL_PARAMETER = 'tag';
 
     /**
+     * @var ContaoFramework
+     */
+    private $framework;
+
+    /**
      * @var DefaultManager
      */
     private $tagsManager;
 
     /**
      * FaqManager constructor.
+     * @param ContaoFramework $framework
      * @param DefaultManager $tagsManager
      */
-    public function __construct(DefaultManager $tagsManager)
+    public function __construct(ContaoFramework $framework, DefaultManager $tagsManager)
     {
+        $this->framework = $framework;
         $this->tagsManager = $tagsManager;
     }
 
@@ -60,9 +68,12 @@ class FaqManager
      */
     public function generateTag(Tag $tag, string $url = null): array
     {
+        /** @var Input $inputAdapter */
+        $inputAdapter = $this->framework->getAdapter(Input::class);
+
         $data = [
             'name' => $tag->getName(),
-            'isActive' => Input::get(self::URL_PARAMETER) === $tag->getData()['alias'],
+            'isActive' => $inputAdapter->get(self::URL_PARAMETER) === $tag->getData()['alias'],
         ];
 
         // Add the URL, if any
@@ -88,10 +99,13 @@ class FaqManager
         static $cache = [];
 
         if (!array_key_exists($pageId, $cache)) {
-            if ($pageId !== null && ($pageModel = PageModel::findPublishedById($pageId)) !== null) {
+            /** @var PageModel $pageModelAdapter */
+            $pageModelAdapter = $this->framework->getAdapter(PageModel::class);
+
+            if ($pageId !== null && ($pageModel = $pageModelAdapter->findPublishedById($pageId)) !== null) {
                 $cache[$pageId] = $pageModel->getFrontendUrl('/' . self::URL_PARAMETER . '/%s');
             } else {
-                return null;
+                $cache[$pageId] = null;
             }
         }
 
@@ -126,21 +140,27 @@ class FaqManager
 
             case self::ORDER_COUNT_ASC:
                 usort($tags, function (Tag $a, Tag $b): int {
-                    if ($a->getData()['count'] === $b->getData()['count']) {
-                        return 0;
+                    $diff = $a->getData()['count'] - $b->getData()['count'];
+
+                    // Sort the same value records alphabetically
+                    if ($diff === 0) {
+                        return strnatcasecmp($a->getName(), $b->getName());
                     }
 
-                    return $a->getData()['count'] - $b->getData()['count'];
+                    return $diff;
                 });
                 break;
 
             case self::ORDER_COUNT_DESC:
                 usort($tags, function (Tag $a, Tag $b): int {
-                    if ($a->getData()['count'] === $b->getData()['count']) {
-                        return 0;
+                    $diff = $b->getData()['count'] - $a->getData()['count'];
+
+                    // Sort the same value records alphabetically
+                    if ($diff === 0) {
+                        return strnatcasecmp($a->getName(), $b->getName());
                     }
 
-                    return $b->getData()['count'] - $a->getData()['count'];
+                    return $diff;
                 });
                 break;
         }
