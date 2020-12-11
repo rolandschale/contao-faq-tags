@@ -1,5 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * FAQ Tags Bundle for Contao Open Source CMS.
+ *
+ * @copyright  Copyright (c) 2020, Codefog
+ * @author     Codefog <https://codefog.pl>
+ * @license    MIT
+ */
+
 namespace Codefog\FaqTagsBundle\Test;
 
 use Codefog\FaqTagsBundle\FaqManager;
@@ -13,7 +23,7 @@ use Contao\TestCase\ContaoTestCase;
 
 class FaqManagerTest extends ContaoTestCase
 {
-    public function testGenerateTags()
+    public function testGenerateTags(): void
     {
         $pageModelAdapter = $this->mockConfiguredAdapter(['findPublishedById' => null]);
         $inputAdapter = $this->mockConfiguredAdapter(['get' => 'foobar']);
@@ -34,7 +44,7 @@ class FaqManagerTest extends ContaoTestCase
         ]));
     }
 
-    public function testGenerateTag()
+    public function testGenerateTag(): void
     {
         $inputAdapter = $this->mockConfiguredAdapter(['get' => 'foobar']);
 
@@ -46,26 +56,26 @@ class FaqManagerTest extends ContaoTestCase
         $fullData = $faqManager->generateTag(new Tag('123', 'Foobar', ['alias' => 'foobar', 'count' => 100]), 'page-alias/tag/%s.html');
 
         $this->assertEquals('Foobar', $fullData['name']);
-        $this->assertEquals(true, $fullData['isActive']);
+        $this->assertTrue($fullData['isActive']);
         $this->assertEquals('page-alias/tag/foobar.html', $fullData['url']);
         $this->assertEquals(100, $fullData['count']);
 
         $basicData = $faqManager->generateTag(new Tag('456', 'Foobaz', ['alias' => 'foobaz']));
 
         $this->assertEquals('Foobaz', $basicData['name']);
-        $this->assertEquals(false, $basicData['isActive']);
+        $this->assertFalse($basicData['isActive']);
         $this->assertArrayNotHasKey('url', $basicData);
         $this->assertArrayNotHasKey('count', $basicData);
     }
 
-    public function testGenerateTagUrl()
+    public function testGenerateTagUrl(): void
     {
         $pageModel = $this->createMock(PageModel::class);
         $pageModel
             ->method('getFrontendUrl')
-            ->willReturnCallback(function ($alias) {
-                return 'page-alias' . $alias . '.html';
-            });
+            ->willReturnCallback(static function ($alias) {
+                return 'page-alias'.$alias.'.html';
+            })
         ;
 
         $pageModelAdapter = $this->mockAdapter(['findPublishedById']);
@@ -79,12 +89,12 @@ class FaqManagerTest extends ContaoTestCase
             $this->createMock(DefaultManager::class)
         );
 
-        $this->assertEquals('page-alias/' . FaqManager::URL_PARAMETER . '/%s.html', $faqManager->generateTagUrl(123));
+        $this->assertEquals('page-alias/'.FaqManager::URL_PARAMETER.'/%s.html', $faqManager->generateTagUrl(123));
         $this->assertNull($faqManager->generateTagUrl(456));
         $this->assertNull($faqManager->generateTagUrl());
     }
 
-    public function testGetFaqTags()
+    public function testGetFaqTags(): void
     {
         $tagFinder = $this->createMock(TagFinder::class);
         $tagFinder
@@ -121,7 +131,7 @@ class FaqManagerTest extends ContaoTestCase
     /**
      * @dataProvider sortTagsDataProvider
      */
-    public function testSortTags(array $tags, string $order, array $expectedOrderIds)
+    public function testSortTags(array $tags, string $order, array $expectedOrderIds): void
     {
         $faqManager = new FaqManager($this->mockContaoFramework(), $this->createMock(DefaultManager::class));
         $sortedTagIds = [];

@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 /*
- * This file is part of Contao.
+ * FAQ Tags Bundle for Contao Open Source CMS.
  *
- * (c) Leo Feyer
- *
- * @license LGPL-3.0-or-later
+ * @copyright  Copyright (c) 2020, Codefog
+ * @author     Codefog <https://codefog.pl>
+ * @license    MIT
  */
 
 error_reporting(E_ALL);

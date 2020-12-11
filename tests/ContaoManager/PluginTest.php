@@ -1,5 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * FAQ Tags Bundle for Contao Open Source CMS.
+ *
+ * @copyright  Copyright (c) 2020, Codefog
+ * @author     Codefog <https://codefog.pl>
+ * @license    MIT
+ */
+
 namespace Codefog\TagsBundle\Test\ContaoManager;
 
 use Codefog\FaqTagsBundle\CodefogFaqTagsBundle;
@@ -16,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 
 class PluginTest extends TestCase
 {
-    public function testInstantiation()
+    public function testInstantiation(): void
     {
         $plugin = new Plugin();
 
@@ -24,7 +34,7 @@ class PluginTest extends TestCase
         $this->assertInstanceOf(ExtensionPluginInterface::class, $plugin);
     }
 
-    public function testGetBundles()
+    public function testGetBundles(): void
     {
         $plugin = new Plugin();
         $bundles = $plugin->getBundles($this->createMock(ParserInterface::class));
@@ -40,7 +50,7 @@ class PluginTest extends TestCase
         $this->assertContains(CodefogTagsBundle::class, $config->getLoadAfter());
     }
 
-    public function testGetExtensionConfig()
+    public function testGetExtensionConfig(): void
     {
         $plugin = new Plugin();
         $config = $plugin->getExtensionConfig('codefog_tags', [], $this->createMock(ContainerBuilder::class));

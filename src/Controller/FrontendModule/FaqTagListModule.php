@@ -45,9 +45,6 @@ class FaqTagListModule extends AbstractFrontendModuleController
 
     /**
      * FaqTagListModule constructor.
-     * @param Connection $connection
-     * @param FaqManager $faqManager
-     * @param DefaultManager $tagsManager
      */
     public function __construct(Connection $connection, FaqManager $faqManager, DefaultManager $tagsManager)
     {
@@ -58,7 +55,7 @@ class FaqTagListModule extends AbstractFrontendModuleController
 
     protected function getResponse(Template $template, ModuleModel $model, Request $request): ?Response
     {
-        if (count($tags = $this->findTags($model)) === 0) {
+        if (0 === \count($tags = $this->findTags($model))) {
             return new Response();
         }
 
@@ -74,17 +71,17 @@ class FaqTagListModule extends AbstractFrontendModuleController
     {
         $faqCategories = StringUtil::deserialize($model->faq_categories, true);
 
-        if (!is_array($faqCategories) || count($faqCategories) === 0) {
+        if (!\is_array($faqCategories) || 0 === \count($faqCategories)) {
             return [];
         }
 
         $faqIds = $this->connection->fetchAllAssociative(
-            'SELECT id FROM tl_faq WHERE pid IN (?)' . ((!\defined('BE_USER_LOGGED_IN') || BE_USER_LOGGED_IN !== true) ? ' AND published=?' : ''),
+            'SELECT id FROM tl_faq WHERE pid IN (?)'.((!\defined('BE_USER_LOGGED_IN') || BE_USER_LOGGED_IN !== true) ? ' AND published=?' : ''),
             [$faqCategories, 1],
             [Connection::PARAM_INT_ARRAY]
         );
 
-        if (count($faqIds) === 0) {
+        if (0 === \count($faqIds)) {
             return [];
         }
 
@@ -96,7 +93,7 @@ class FaqTagListModule extends AbstractFrontendModuleController
 
         $limit = $model->numberOfItems ? (int) $model->numberOfItems : null;
 
-        if (count($tags = $this->tagsManager->getTagFinder()->getTopTags($criteria, $limit, true)) === 0) {
+        if (0 === \count($tags = $this->tagsManager->getTagFinder()->getTopTags($criteria, $limit, true))) {
             return [];
         }
 

@@ -1,5 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * FAQ Tags Bundle for Contao Open Source CMS.
+ *
+ * @copyright  Copyright (c) 2020, Codefog
+ * @author     Codefog <https://codefog.pl>
+ * @license    MIT
+ */
 
 namespace Codefog\FaqTagsBundle\Test\DependencyInjection;
 
@@ -9,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class CodefogFaqTagsExtensionTest extends TestCase
 {
-    public function testLoad()
+    public function testLoad(): void
     {
         $container = new ContainerBuilder();
         $extension = new CodefogFaqTagsExtension();

@@ -1,5 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * FAQ Tags Bundle for Contao Open Source CMS.
+ *
+ * @copyright  Copyright (c) 2020, Codefog
+ * @author     Codefog <https://codefog.pl>
+ * @license    MIT
+ */
+
 namespace Codefog\FaqTagsBundle;
 
 use Codefog\TagsBundle\Manager\DefaultManager;
@@ -11,17 +21,17 @@ use Contao\PageModel;
 class FaqManager
 {
     /**
-     * Sorting order
+     * Sorting order.
      */
-    const ORDER_NAME_ASC = 'name_asc';
-    const ORDER_NAME_DESC = 'name_desc';
-    const ORDER_COUNT_ASC = 'count_asc';
-    const ORDER_COUNT_DESC = 'count_desc';
+    public const ORDER_NAME_ASC = 'name_asc';
+    public const ORDER_NAME_DESC = 'name_desc';
+    public const ORDER_COUNT_ASC = 'count_asc';
+    public const ORDER_COUNT_DESC = 'count_desc';
 
     /**
-     * URL parameter
+     * URL parameter.
      */
-    const URL_PARAMETER = 'tag';
+    public const URL_PARAMETER = 'tag';
 
     /**
      * @var ContaoFramework
@@ -35,8 +45,6 @@ class FaqManager
 
     /**
      * FaqManager constructor.
-     * @param ContaoFramework $framework
-     * @param DefaultManager $tagsManager
      */
     public function __construct(ContaoFramework $framework, DefaultManager $tagsManager)
     {
@@ -49,7 +57,7 @@ class FaqManager
      */
     public function generateTags(array $tags, int $pageId = null): array
     {
-        if (count($tags) === 0) {
+        if (0 === \count($tags)) {
             return [];
         }
 
@@ -77,7 +85,7 @@ class FaqManager
         ];
 
         // Add the URL, if any
-        if ($url !== null) {
+        if (null !== $url) {
             $data['url'] = sprintf($url, $tag->getData()['alias']);
         }
 
@@ -92,18 +100,18 @@ class FaqManager
     }
 
     /**
-     * Generate the tag URL
+     * Generate the tag URL.
      */
     public function generateTagUrl(int $pageId = null): ?string
     {
         static $cache = [];
 
-        if (!array_key_exists($pageId, $cache)) {
+        if (!\array_key_exists($pageId, $cache)) {
             /** @var PageModel $pageModelAdapter */
             $pageModelAdapter = $this->framework->getAdapter(PageModel::class);
 
-            if ($pageId !== null && ($pageModel = $pageModelAdapter->findPublishedById($pageId)) !== null) {
-                $cache[$pageId] = $pageModel->getFrontendUrl('/' . self::URL_PARAMETER . '/%s');
+            if (null !== $pageId && ($pageModel = $pageModelAdapter->findPublishedById($pageId)) !== null) {
+                $cache[$pageId] = $pageModel->getFrontendUrl('/'.self::URL_PARAMETER.'/%s');
             } else {
                 $cache[$pageId] = null;
             }
@@ -127,23 +135,23 @@ class FaqManager
     {
         switch ($order) {
             case self::ORDER_NAME_ASC:
-                usort($tags, function (Tag $a, Tag $b): int {
+                usort($tags, static function (Tag $a, Tag $b): int {
                     return strnatcasecmp($a->getName(), $b->getName());
                 });
                 break;
 
             case self::ORDER_NAME_DESC:
-                usort($tags, function (Tag $a, Tag $b): int {
+                usort($tags, static function (Tag $a, Tag $b): int {
                     return -strnatcasecmp($a->getName(), $b->getName());
                 });
                 break;
 
             case self::ORDER_COUNT_ASC:
-                usort($tags, function (Tag $a, Tag $b): int {
+                usort($tags, static function (Tag $a, Tag $b): int {
                     $diff = $a->getData()['count'] - $b->getData()['count'];
 
                     // Sort the same value records alphabetically
-                    if ($diff === 0) {
+                    if (0 === $diff) {
                         return strnatcasecmp($a->getName(), $b->getName());
                     }
 
@@ -152,11 +160,11 @@ class FaqManager
                 break;
 
             case self::ORDER_COUNT_DESC:
-                usort($tags, function (Tag $a, Tag $b): int {
+                usort($tags, static function (Tag $a, Tag $b): int {
                     $diff = $b->getData()['count'] - $a->getData()['count'];
 
                     // Sort the same value records alphabetically
-                    if ($diff === 0) {
+                    if (0 === $diff) {
                         return strnatcasecmp($a->getName(), $b->getName());
                     }
 

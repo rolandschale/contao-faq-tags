@@ -1,5 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * FAQ Tags Bundle for Contao Open Source CMS.
+ *
+ * @copyright  Copyright (c) 2020, Codefog
+ * @author     Codefog <https://codefog.pl>
+ * @license    MIT
+ */
+
 namespace Codefog\FaqTagsBundle\FrontendModule;
 
 use Codefog\FaqTagsBundle\FaqManager;
@@ -30,7 +40,7 @@ trait TagsTrait
     }
 
     /**
-     * Get the FAQ items by tag
+     * Get the FAQ items by tag.
      */
     protected function getFaqItemsByTag(Tag $tag, array $faqCategories): ?Collection
     {
@@ -38,13 +48,13 @@ trait TagsTrait
         $faqIds = $tagManager->getSourceFinder()->findMultiple($tagManager->createSourceCriteria()->setTag($tag));
 
         // Return if there are no FAQ items matching the tag
-        if (count($faqIds) === 0) {
+        if (0 === \count($faqIds)) {
             return null;
         }
 
         $columns = [
-            'id IN (' . implode(',', array_map('\intval', $faqIds)) . ')',
-            'pid IN(' . implode(',', array_map('\intval', $faqCategories)) . ')',
+            'id IN ('.implode(',', array_map('\intval', $faqIds)).')',
+            'pid IN('.implode(',', array_map('\intval', $faqCategories)).')',
         ];
 
         $values = [];
@@ -69,7 +79,7 @@ trait TagsTrait
         $tagManager = $this->getTagsManager();
         $tag = $tagManager->getTagFinder()->findSingle($tagManager->createTagCriteria()->setAlias($tagAlias));
 
-        if ($tag === null) {
+        if (null === $tag) {
             throw new PageNotFoundException(sprintf('Tag with alias "%s" does not exist', $tagAlias));
         }
 
@@ -77,24 +87,20 @@ trait TagsTrait
     }
 
     /**
-     * Get the FAQ manager
+     * Get the FAQ manager.
      */
     protected function getFaqManager(): FaqManager
     {
         /** @var FaqManager $faqManager */
-        $faqManager = System::getContainer()->get('codefog_faq_tags.faq_manager');
-
-        return $faqManager;
+        return System::getContainer()->get('codefog_faq_tags.faq_manager');
     }
 
     /**
-     * Get the tags manager
+     * Get the tags manager.
      */
     protected function getTagsManager(): DefaultManager
     {
         /** @var DefaultManager $tagManager */
-        $tagManager = System::getContainer()->get('codefog_tags.manager.codefog_faq');
-
-        return $tagManager;
+        return System::getContainer()->get('codefog_tags.manager.codefog_faq');
     }
 }
