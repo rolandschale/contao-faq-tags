@@ -8,7 +8,7 @@
 
 Minimum requirements:
 
- - PHP 7.1
+ - PHP 7.2
  - Contao 4.9
  - Contao FAQ 4.9
 
