@@ -75,9 +75,11 @@ class FaqTagListModule extends AbstractFrontendModuleController
             return [];
         }
 
+        $isPreviewMode = \defined('BE_USER_LOGGED_IN') && BE_USER_LOGGED_IN === true;
+
         $faqIds = $this->connection->fetchAllAssociative(
-            'SELECT id FROM tl_faq WHERE pid IN (?)'.((!\defined('BE_USER_LOGGED_IN') || BE_USER_LOGGED_IN !== true) ? ' AND published=?' : ''),
-            [$faqCategories, 1],
+            'SELECT id FROM tl_faq WHERE pid IN (?)'.(!$isPreviewMode ? ' AND published=?' : ''),
+            $isPreviewMode ? [$faqCategories] : [$faqCategories, 1],
             [Connection::PARAM_INT_ARRAY]
         );
 
