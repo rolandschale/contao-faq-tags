@@ -13,7 +13,7 @@ EOF;
 $config = new Contao\PhpCsFixer\DefaultConfig($header);
 $config
     ->getFinder()
-    ->in(['src/'])
+    ->in(['src/', 'tests/'])
 ;
 
 return $config;

@@ -1,0 +1,21 @@
+<?php $this->extend('block_unsearchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<?php if ($this->tagsHeadline): ?>
+    <h3 class="tags-headline"><?= $this->tagsHeadline ?></h3>
+<?php endif; ?>
+
+<?php foreach ($this->faq as $category): ?>
+    <h2><?= $category['headline'] ?></h2>
+    <ul class="<?= $category['class'] ?>">
+        <?php foreach ($category['items'] as $faq): ?>
+            <li class="<?= $faq['class'] ?>">
+                <a href="<?= $faq['href'] ?>" title="<?= $faq['title'] ?>"><?= $faq['question'] ?></a>
+                <?php $this->insert('faq_tags', $faq); ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php endforeach; ?>
+
+<?php $this->endblock(); ?>

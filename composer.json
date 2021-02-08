@@ -11,14 +11,17 @@
         }
     ],
     "require": {
-        "php": "^7.1",
+        "php": "^7.2",
         "contao/core-bundle": "^4.9",
         "contao/faq-bundle": "^4.9",
-        "codefog/tags-bundle": "^3.1"
+        "codefog/tags-bundle": "^3.2"
     },
     "require-dev": {
         "contao/manager-plugin": "^2.0",
-        "contao/php-cs-fixer": "^2.2"
+        "contao/php-cs-fixer": "^2.2",
+        "phpunit/phpunit": "^8.5",
+        "php-coveralls/php-coveralls": "^2.4",
+        "contao/test-case": "^4.2"
     },
     "conflict": {
         "contao/manager-plugin": "<2.0 || >=3.0"
@@ -26,6 +29,11 @@
     "autoload": {
         "psr-4": {
             "Codefog\\FaqTagsBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Codefog\\FaqTagsBundle\\Test\\": "tests/"
         }
     },
     "extra": {
