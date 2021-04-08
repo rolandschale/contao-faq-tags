@@ -39,14 +39,14 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['faq_allowTagFiltering'] = [
     'exclude' => true,
     'inputType' => 'checkbox',
     'eval' => ['tl_class' => 'clr w50'],
-    'sql' => ['type' => 'boolean', 'unsigned' => true, 'default' => 0],
+    'sql' => ['type' => 'boolean', 'default' => 0],
 ];
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['faq_showTags'] = [
     'exclude' => true,
     'inputType' => 'checkbox',
     'eval' => ['tl_class' => 'w50'],
-    'sql' => ['type' => 'boolean', 'unsigned' => true, 'default' => 0],
+    'sql' => ['type' => 'boolean', 'default' => 0],
 ];
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['faq_tagsOrder'] = [
