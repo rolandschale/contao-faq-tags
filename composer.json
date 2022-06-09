@@ -11,7 +11,6 @@
         }
     ],
     "require": {
-        "php": "^7.2",
         "contao/core-bundle": "^4.9",
         "contao/faq-bundle": "^4.9",
         "codefog/tags-bundle": "^3.2"
